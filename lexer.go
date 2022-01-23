@@ -13,8 +13,6 @@ TODO: add inFunction property to Obfuscator
 TODO: add way to delete elements of the
 	obfuscated map when went out of the
 	specific scope
-
-TODO: test the NextToken func
 */
 
 func (o *Obfuscator) read() rune {
