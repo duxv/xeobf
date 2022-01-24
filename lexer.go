@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"unicode"
 )
@@ -30,12 +31,12 @@ func (o *Obfuscator) read() rune {
 }
 
 func (o *Obfuscator) unread() {
-	err := o.reader.UnreadRune()
-	if err != nil {
-		// if any error occurred, means that there's been
-		// something wrong with the written code
-		panic(err)
-	}
+	_ = o.reader.UnreadRune()
+	// if err != nil {
+	// 	// if any error occurred, means that there's been
+	// 	// something wrong with the written code
+	// 	//panic(err)
+	// }
 }
 
 func (o *Obfuscator) peek() rune {
@@ -127,7 +128,7 @@ func (o *Obfuscator) nextToken() (tok Token) {
 		tok.Type = String
 		tok.Literal = o.readString()
 	default:
-		if unicode.IsLetter(ch0) {
+		if unicode.IsLetter(ch0) || ch0 == '_' {
 			tok.Literal = string(ch0) + o.readKeywordOrIdent()
 			if isKeyword(tok.Literal) {
 				tok.Type = Keyword
@@ -140,6 +141,7 @@ func (o *Obfuscator) nextToken() (tok Token) {
 			tok.Type = Int
 			return tok
 		} else {
+			fmt.Println(string(ch0))
 			panic("Something went wrong in the next token func... Please contact a developer with this error message.")
 		}
 	}

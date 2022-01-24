@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"math/rand"
 	"strings"
 	"time"
@@ -90,7 +89,10 @@ func (o *Obfuscator) Obfuscate() *bytes.Buffer {
 			// do not obfuscate package names
 			// since we are not ready for this yet
 			if lastKeyword == "package" {
-				out.WriteString(" " + tok.Literal)
+				out.WriteString(tok.Literal)
+				continue
+			} else if o.isImported(lastKeyword) {
+				out.WriteString(tok.Literal)
 				continue
 			}
 			if obf, ok := o.obfuscated[tok.Literal]; ok {
@@ -104,7 +106,8 @@ func (o *Obfuscator) Obfuscate() *bytes.Buffer {
 
 			/*
 				TODO: make a way not to obfuscate imported functions
-				else if o.isImported(tok.Literal) {
+				XXX already implemented something for this, doesn't work for
+				more than one func.
 			*/
 		case Keyword:
 			if tok.Literal == "import" {
@@ -125,7 +128,11 @@ func (o *Obfuscator) Obfuscate() *bytes.Buffer {
 						split := strings.Split(tok.Literal, "/")
 						pckgName := split[len(split)-1]
 						o.addImported(pckgName)
-						out.WriteString("\"" + tok.Literal + "\"")
+						if tok.Type == String {
+							out.WriteString("\"" + tok.Literal + "\"")
+						} else {
+							out.WriteString(tok.Literal)
+						}
 					}
 				}
 				out.WriteRune(')')
@@ -143,6 +150,5 @@ func (o *Obfuscator) Obfuscate() *bytes.Buffer {
 			lastKeyword = tok.Literal
 		}
 	}
-	fmt.Println(o.imported)
 	return out
 }

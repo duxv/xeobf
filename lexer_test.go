@@ -20,7 +20,7 @@ func TestReadChar(t *testing.T) {
 }
 
 func TestReadString(t *testing.T) {
-	totest := `testing this onehundered333 timesaday`
+	totest := "testing this onehundered333 timesaday"
 	split := strings.Split(totest, " ")
 
 	for _, str := range split {
