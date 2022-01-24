@@ -56,11 +56,25 @@ func (o *Obfuscator) readKeywordOrIdent() string {
 	return ident
 }
 
+func isNumberPart(c rune) bool {
+	switch {
+	case unicode.IsDigit(c):
+	case c == '.':
+	case c == 'x' || c == 'a' || c == 'b' ||
+		c == 'c' || c == 'd' || c == 'e' ||
+		c == 'f':
+	default:
+		return false
+	}
+
+	return true
+}
+
 // Only working with int for now.
 func (o *Obfuscator) readNumber() string {
 	var num string
 
-	for ch := o.read(); unicode.IsDigit(ch); ch = o.read() {
+	for ch := o.read(); isNumberPart(ch); ch = o.read() {
 		num += string(ch)
 	}
 	return num
@@ -138,7 +152,7 @@ func (o *Obfuscator) nextToken() (tok Token) {
 			return tok
 		} else if unicode.IsDigit(ch0) {
 			tok.Literal = string(ch0) + o.readNumber()
-			tok.Type = Int
+			tok.Type = Number
 			return tok
 		} else {
 			fmt.Println(string(ch0))

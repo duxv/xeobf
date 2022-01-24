@@ -5,7 +5,7 @@ type TokenType int
 const (
 	Char TokenType = iota
 	Ident
-	Int
+	Number
 	Keyword
 	Operator
 	String
@@ -20,7 +20,7 @@ type Token struct {
 var tokNames = map[TokenType]string{
 	Char:       "Char",
 	Ident:      "Ident",
-	Int:        "Int",
+	Number:     "Number",
 	Keyword:    "Keyword",
 	Operator:   "Operator",
 	String:     "String",

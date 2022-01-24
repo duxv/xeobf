@@ -38,7 +38,7 @@ func TestReadString(t *testing.T) {
 func TestReadNumber(t *testing.T) {
 	totest := []string{
 		"0", "1000", "393", "842",
-		"432898423",
+		"432898423", "0xa32", "0xf", "0x33",
 	}
 	for _, str := range totest {
 		obf := NewObfuscator(str)
@@ -70,7 +70,7 @@ func TestNextToken(t *testing.T) {
 	}
 	totest := []testCase{
 		{"break", Keyword, "break"},
-		{"43289", Int, "43289"},
+		{"43.289", Number, "43.289"},
 		{"\"STRINGY\"", String, "STRINGY"},
 		{"'c'", Char, "c"},
 		{"+", Operator, "+"},
