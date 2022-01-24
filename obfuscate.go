@@ -90,10 +90,10 @@ func (o *Obfuscator) Obfuscate() *bytes.Buffer {
 			// since we are not ready for this yet
 			if lastKeyword == "package" {
 				out.WriteString(tok.Literal)
-				goto end
+				goto endFor
 			} else if o.isImported(lastKeyword) {
 				out.WriteString(tok.Literal)
-				goto end
+				goto endFor
 			}
 			if obf, ok := o.obfuscated[tok.Literal]; ok {
 				out.WriteString(obf)
@@ -146,7 +146,7 @@ func (o *Obfuscator) Obfuscate() *bytes.Buffer {
 		default:
 			out.WriteString(tok.Literal)
 		}
-	end:
+	endFor:
 		if tok.Type == Keyword || tok.Type == Ident {
 			lastKeyword = tok.Literal
 		}
